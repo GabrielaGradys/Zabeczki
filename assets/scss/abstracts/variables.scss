@@ -1,0 +1,26 @@
+$phone: 767px;
+$tablet: 1200px;
+$laptop: 1600px;
+$fullHD: 1920px;
+$screen2k: 2400px;
+$projectWidth: 1920;
+$projectWidthTablet: 768;
+$projectWidthMobile: 375;
+
+:root {
+    --gray: #7c7c7c;
+    --white: #ffffff;
+    --black: #222222;
+    --orange: #DB913E;
+    --yellow: #FFBD59;
+    --skin: #FDDEBA;
+    --darkBlue: #15253D;
+    --lightBlue: #38B6FF;
+    --pastelBlue: #9ABBCE;
+    --primary: var(--lightBlue);
+    --transition: 0.3s all ease-in-out;
+    --font-primary: Oxygen, sans-serif;
+    --font-secondary: 'Reenie Beanie', cursive;
+    --font-tertiary: Arial, sans-serif;
+    --phone-w: #{$phone};
+}
