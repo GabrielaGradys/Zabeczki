@@ -1,5 +1,5 @@
 <template>
-  <main class="grid grid-cols-1 pt-12 min-h-screen">
+  <main class="grid grid-cols-1 min-h-screen">
     <div id="Map_Show" class="flex w-full tracking-wide">
       <div id="map" class="w-full h-full"></div>
     </div>
@@ -60,7 +60,6 @@ export default {
       "pk.eyJ1IjoiZ2FicmllbGEtZ3JhZHlzIiwiYSI6ImNremFqMW42eTFmcWEyb245OXAzZTl5MmsifQ.dCPrRvsSH78RNhTBPP74cQ";
     const map = new mapboxgl.Map({
       container: "map", // <div id="map"></div>
-      // style: "mapbox://styles/gabriela-gradys/ckzazx9hk001914qijhpvarnb",
       style: "mapbox://styles/gabriela-gradys/ckzazx9hk001914qijhpvarnb",
       center: [19.90595, 50.02439], // starting position as [lng, lat]
       bearing: 180,
@@ -105,9 +104,9 @@ export default {
       },
       mapboxgl: mapboxgl,
     });
-
     map.addControl(geocoder);
     map.addControl(geolocate);
+
     //Geolocation.getCurrentPosition()
     // TODO Dodać plik GeoJSON zawierający bibliotekę lokazliacji/dataset
     // TODO opracować sposób dopisywania do pliku na podstawie informacji wprowadzonych przez użytkownika
@@ -182,12 +181,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #map {
   .mapboxgl-popup-content {
     text-align: center;
-    font-family: --font-primar;
-    text-color: --darkBlue;
+    font-family: var(--font-primary);
+    color: white;
     background: rgb(56, 182, 255);
     background: linear-gradient(
       0deg,
@@ -195,10 +194,48 @@ export default {
       rgba(16, 185, 129, 1) 100%
     );
   }
-
-  #geocoder-container > div {
-    min-width: 50%;
-    margin-left: 25%;
+  .mapboxgl-popup-tip {
+    border-top-color: #38b6ff;
+  }
+  .mapboxgl-ctrl-top-right {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+  .mapboxgl-ctrl-geocoder {
+    width: calc(300rem / 16);
+    input {
+      width: 100%;
+      padding: calc(8rem / 16) calc(16rem / 16);
+      border-radius: 999px;
+      box-shadow: 4px 4px 4px #7c7c7cb3;
+      font-family: var(--font-primary);
+    }
+    ul.suggestions {
+      position: relative;
+      top: calc(2rem / 16);
+      z-index: 10;
+      background: white;
+      display: block;
+      padding: calc(4rem / 16);
+      border-radius: calc(8rem / 16);
+      li {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: calc(4rem / 16) calc(8rem / 16);
+        &.active {
+          color: #38b6ff;
+        }
+      }
+    }
+  }
+  .mapboxgl-ctrl-group {
+    box-shadow: 4px 4px 4px #7c7c7cb3;
+  }
+  .mapboxgl-ctrl-attrib-button {
+    display: none;
   }
 }
 </style>

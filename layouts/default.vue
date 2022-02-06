@@ -1,13 +1,13 @@
 <template>
-    <div>
-        <Header />
-        <Nuxt />
-        <!--        <Footer />-->
-    </div>
+  <div>
+    <!--        <Header />-->
+    <Nuxt />
+    <!--        <Footer />-->
+  </div>
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style lang="scss"></style>
