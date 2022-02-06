@@ -1,18 +1,18 @@
 /* abstracts */
-@import './abstracts.scss';
+@import "./abstracts.scss";
 
 /* vendors */
-@import './vendors/fonts.css';
+@import "./vendors/fonts.css";
 
 /* base */
-@import './base/normalize';
-@import './base/html';
-@import './base/global';
+@import "./base/normalize";
+@import "./base/html";
+@import "./base/global";
 
 /* layout */
 
 /* components */
-
+@import "./components/Map";
 /* pages */
 
 /* themes */
