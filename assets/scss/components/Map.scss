@@ -31,6 +31,10 @@
     border-top-color: #38b6ff;
     transform: translateY(-1px);
   }
+  .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+    border-bottom-color: #10b981;
+    transform: translateY(1px);
+  }
   .mapboxgl-ctrl-top-right {
     display: flex;
     flex-direction: row-reverse;
