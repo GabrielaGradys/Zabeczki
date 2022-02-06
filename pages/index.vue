@@ -100,6 +100,7 @@ export default {
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       marker: {
+        //TODO Poprawić marker wyszukiwania pozycji
         color: "orange",
       },
       mapboxgl: mapboxgl,
@@ -111,19 +112,43 @@ export default {
     // TODO Dodać plik GeoJSON zawierający bibliotekę lokazliacji/dataset
     // TODO opracować sposób dopisywania do pliku na podstawie informacji wprowadzonych przez użytkownika
     // Library of pins
-    // map.addSource("map", {
-    //   type: "geojson",
-    //   data: "https://github.com/GabrielaGradys/Zabeczki/blob/c36fd0caaa2291aef60d137820ecaf435680a6cb/data/map.geojson",
-    // });
+    // setTimeout(() => {
+    //   map.addSource("map", {
+    //     type: "geojson",
+    //     data: "/map.geojson",
+    //   });
+    // }, 2000);
     map.on("load", () => {
-      map.addLayer({
-        id: "rpd_parks",
-        type: "fill",
-        source: {
-          type: "vector",
-          url: "gabriela-gradys.ckzbbp9bz1fy422oflop827rp-0cch2",
-        },
-      });
+      // Add an image to use as a custom marker
+      map.loadImage(
+        "https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png",
+        (error, image) => {
+          if (error) throw error;
+          map.addImage("custom-marker", image);
+          // Add a GeoJSON source with 2 points
+          map.addSource("points", {
+            type: "geojson",
+            data: "/map.geojson",
+          });
+
+          // Add a symbol layer
+          map.addLayer({
+            id: "points",
+            type: "symbol",
+            source: "points",
+            layout: {
+              "icon-image": "custom-marker",
+              // get the title name from the source's "title" property
+              "text-field": ["get", "title"],
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+              "text-offset": [0, 1.25],
+              "text-anchor": "top",
+            },
+          });
+        }
+      );
+    });
+    map.on("load", () => {
       map.on("click", (event) => {
         const features = map.queryRenderedFeatures(event.point, {
           layers: ["zabeczki"],
@@ -186,6 +211,7 @@ export default {
   .mapboxgl-popup-content {
     text-align: center;
     font-family: var(--font-primary);
+    font-weight: bold;
     color: white;
     background: rgb(56, 182, 255);
     background: linear-gradient(
@@ -193,9 +219,26 @@ export default {
       rgba(56, 182, 255, 1) 0%,
       rgba(16, 185, 129, 1) 100%
     );
+    h3 {
+      font-size: calc(27rem / 16);
+      font-family: var(--font-secondary);
+      line-height: 1.3;
+    }
+    p {
+      font-size: calc(14rem / 16);
+    }
+    .mapboxgl-popup-close-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: calc(20rem / 16);
+      height: calc(20rem / 16);
+      font-size: calc(18rem / 16);
+    }
   }
   .mapboxgl-popup-tip {
     border-top-color: #38b6ff;
+    transform: translateY(-1px);
   }
   .mapboxgl-ctrl-top-right {
     display: flex;
