@@ -10,14 +10,13 @@
     },
     "dependencies": {
         "@glidejs/glide": "^3.4.1",
-        "@googlemaps/js-api-loader": "^1.13.4",
         "@vimeo/player": "^2.16.1",
         "core-js": "^3.15.1",
         "gsap": "^3.8.0",
         "js-cookie": "^3.0.1",
+        "mapbox-gl": "^2.7.0",
         "nuxt": "^2.15.7",
-        "nuxt-lazy-load": "^1.2.7",
-        "vue2-google-maps": "^0.10.7"
+        "nuxt-lazy-load": "^1.2.7"
     },
     "devDependencies": {
         "@nuxtjs/axios": "^5.13.6",
