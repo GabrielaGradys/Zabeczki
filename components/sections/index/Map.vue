@@ -15,9 +15,17 @@ export default {
     map: null,
     geolocate: null,
     geocoder: null,
-    clickMarker: null,
+    tempMarker: {
+      obj: null,
+      pinColor: null,
+      title: null,
+      description: null,
+      position: null,
+    },
+    editMode: false,
   }),
   methods: {
+    // Generate map
     createMap() {
       this.map = new mapboxgl.Map({
         accessToken: this.token,
@@ -52,45 +60,62 @@ export default {
       this.map.addControl(this.geocoder);
       this.map.addControl(this.geolocate);
     },
-    CreateImgEl(url) {
-      let el = document.createElement("div");
-      const width = 40;
-      const height = 40;
-      el.className = "marker";
-      el.style.backgroundImage = `url(${url})`;
-      el.style.width = `calc(${width}rem / 16)`;
-      el.style.height = `calc(${height}rem / 16)`;
-      el.style.backgroundSize = "100%";
-      return el;
-    },
-    addMarker(title, description, position, pinColor) {
+    // Creating function to make a new pin
+    addMarker(title, description, pinColor, position) {
       const popup = new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(position)
         .setHTML(`<h3>${title}</h3><p>${description}</p>`);
-      new mapboxgl.Marker(this.CreateImgEl(`/Markers/${pinColor}.svg`))
+
+      // Creating padlock as a pin
+      function CreateImgEl(url) {
+        let el = document.createElement("div");
+        const width = 40;
+        const height = 40;
+        el.className = "marker";
+        el.style.backgroundImage = `url(${url})`;
+        el.style.width = `calc(${width}rem / 16)`;
+        el.style.height = `calc(${height}rem / 16)`;
+        el.style.backgroundSize = "100%";
+        return el;
+      }
+      return new mapboxgl.Marker(CreateImgEl(`/Markers/${pinColor || "2"}.svg`))
         .setLngLat(position)
         .setPopup(popup)
         .addTo(this.map);
     },
+    //Create a function to lad existing padlocks
     async readLibrary() {
       let data = await fetch("/map.geojson");
       data = await data.json();
       return data;
     },
-    updateClickMarker(position) {
-      if (this.clickMarker && this.clickMarker.remove)
-        this.clickMarker.remove();
-      this.clickMarker = new mapboxgl.Marker()
-        .setLngLat([position.lng, position.lat])
-        .addTo(this.map);
+    // Creating a function to make and update temporary marker after click
+    updateTempMarker() {
+      if (this.tempMarker.obj && this.tempMarker.obj.remove)
+        this.tempMarker.obj.remove();
+      // Create button design from form
+
+      this.tempMarker.obj = this.addMarker(
+        this.tempMarker.title,
+        this.tempMarker.description,
+        this.tempMarker.pinColor,
+        this.tempMarker.position
+      );
     },
+    // Saving new marker to server
+    saveToServer() {},
   },
+  // Loading Map, Geocoder and geolocator and existing Markers
   mounted() {
     this.createMap();
     this.initControls();
-    // this.addMarker("test", "tescik", [-21.9270884, 64.1436456], "blue");
+    // In editMode: If click -> create TempMarker
     this.map.on("click", (e) => {
-      this.updateClickMarker(e.lngLat.wrap());
+      if (this.editMode) {
+        let position = e.lngLat.wrap();
+        this.tempMarker.position = [position.lng, position.lat];
+        this.updateTempMarker();
+      }
     });
     // Taking properties form dictionary
     this.readLibrary().then((markers) => {
@@ -98,14 +123,12 @@ export default {
         console.log(marker);
         this.addMarker(
           marker.properties.title,
-          "",
-          marker.geometry.coordinates,
-          "blue"
+          marker.properties.description,
+          marker.properties.pinColor,
+          marker.geometry.coordinates
         );
       });
     });
-    // Library of pins
-    // TODO opracować sposób dopisywania do pliku na podstawie informacji wprowadzonych przez użytkownika
   },
 };
 </script>

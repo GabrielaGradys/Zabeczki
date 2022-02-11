@@ -16,23 +16,7 @@
           Dodajmy punkt na mapie
         </p>
       </div>
-      <div id="Wsporzedne" class="grid gap-4">
-        <p class="text-white text-bold tracking-wide">
-          Podaj współrzędne punktu
-        </p>
-        <!--        TODO Dodać form (Tytul, opis, colorpicker, moze obraz) -->
-        <input
-          type="number"
-          placeholder="Lang"
-          class="bg-white rounded-xl text-center p-4"
-        />
-        <input
-          type="number"
-          placeholder="lat"
-          class="bg-white rounded-xl text-center p-4"
-        />
-      </div>
-      <ColorPicker />
+      <PinForm />
     </div>
   </div>
 </template>
