@@ -17,9 +17,9 @@ export default {
     geocoder: null,
     tempMarker: {
       obj: null,
-      pinColor: null,
-      title: null,
-      description: null,
+      pinColor: 2,
+      title: "",
+      description: "",
       position: null,
     },
     editMode: false,
@@ -62,9 +62,14 @@ export default {
     },
     // Creating function to make a new pin
     addMarker(title, description, pinColor, position) {
-      const popup = new mapboxgl.Popup({ offset: [0, -15] })
+      const popup = new mapboxgl.Popup({
+        offset: [0, -15],
+        focusAfterOpen: false,
+      })
         .setLngLat(position)
-        .setHTML(`<h3>${title}</h3><p>${description}</p>`);
+        .setHTML(
+          `<h3>${title}</h3><p class = "break-words">${description}</p>`
+        );
 
       // Creating padlock as a pin
       function CreateImgEl(url) {
@@ -78,19 +83,21 @@ export default {
         el.style.backgroundSize = "100%";
         return el;
       }
-      return new mapboxgl.Marker(CreateImgEl(`/Markers/${pinColor || "2"}.svg`))
+      return new mapboxgl.Marker(CreateImgEl(`/Markers/${pinColor || 2}.svg`))
         .setLngLat(position)
         .setPopup(popup)
         .addTo(this.map);
     },
     //Create a function to lad existing padlocks
-    async readLibrary() {
-      let data = await fetch("/map.geojson");
+    async readLibrary(database) {
+      database = database ? database : this.$route.query["database"]; //jesli podano parametr, wez parametr, jesli nie to jesli jest parametr w url, wez go, a jak nie ma to ustaw na
+      let data = await fetch(`/PinsBase/${database}.geojson`);
       data = await data.json();
       return data;
     },
     // Creating a function to make and update temporary marker after click
     updateTempMarker() {
+      if (!this.tempMarker.position) return;
       if (this.tempMarker.obj && this.tempMarker.obj.remove)
         this.tempMarker.obj.remove();
       // Create button design from form
@@ -101,9 +108,42 @@ export default {
         this.tempMarker.pinColor,
         this.tempMarker.position
       );
+      console.log(
+        this.tempMarker.title || this.tempMarker.description ? true : false
+      );
+      if (this.tempMarker.title || this.tempMarker.description)
+        this.tempMarker.obj.togglePopup();
     },
     // Saving new marker to server
-    saveToServer() {},
+    saveToDataBase() {
+      const database = this.$route.query["database"]; //wyciaganie z adresu url varieble database
+      const newMarker = {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: this.tempMarker.position,
+        },
+        properties: {
+          title: this.tempMarker.title,
+          description: this.tempMarker.description,
+          pinColor: this.tempMarker.pinColor,
+        },
+      };
+      async function postData(url = "", data = {}) {
+        const response = await fetch(url, {
+          method: "POST",
+          cache: "no-cache",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        return response.json();
+      }
+      this.readLibrary(database).then((markers) => {
+        markers.features.push(newMarker);
+        postData(`/save_to_json.php?database=${database}`, markers);
+        console.log(markers);
+      });
+    },
   },
   // Loading Map, Geocoder and geolocator and existing Markers
   mounted() {
@@ -120,7 +160,6 @@ export default {
     // Taking properties form dictionary
     this.readLibrary().then((markers) => {
       markers.features.map((marker) => {
-        console.log(marker);
         this.addMarker(
           marker.properties.title,
           marker.properties.description,
