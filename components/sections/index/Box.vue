@@ -5,6 +5,7 @@
   >
     <OCDHome :class="mode === 'Home' ? 'grid' : 'hidden'" />
     <AddBase :class="mode === 'Base' ? 'flex' : 'hidden'" />
+    <Deleter :class="mode === 'Dele' ? 'flex' : 'hidden'" />
     <PinForm :class="mode === 'Edit' ? 'grid' : 'hidden'" />
     <Preview :class="mode === 'Prev' ? 'flex' : 'hidden'" />
   </div>

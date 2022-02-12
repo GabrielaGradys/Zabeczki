@@ -9,7 +9,7 @@
       <select
         id="selectBase"
         @change="setDatabase"
-        class="bg-blue rounded-xl font-bold text-center w-full"
+        class="bg-blue rounded-xl font-bold text-center text-blue-200 w-full"
       >
         <option
           v-for="i in pinDatabases"
@@ -34,6 +34,13 @@
       >
         Dodaj Pin
       </button>
+      <button
+        v-if="numberOFPin > 0"
+        class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
+        @click="$parent.Flip('Dele')"
+      >
+        Usuń Pin
+      </button>
     </div>
   </div>
 </template>
@@ -41,7 +48,7 @@
 <script>
 export default {
   name: "OCDHome",
-  data: () => ({ pinDatabases: null }),
+  data: () => ({ pinDatabases: null, numberOFPin: 0 }),
   methods: {
     setDatabase(event) {
       console.log(event);
@@ -58,10 +65,10 @@ export default {
       .then((x) => x.json())
       .then((x) => (this.pinDatabases = x))
       .then(
-        this.$nextTick(() => {
+        setTimeout(() => {
           this.$el.querySelector("#selectBase").value =
             this.$route.query["database"];
-        })
+        }, 500)
       );
   },
 };

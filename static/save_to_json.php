@@ -19,7 +19,7 @@
 	function make_backup($database) {
         if(!file_exists("PinsBase/$database.geojson")) return;
         $version = get_timestamp();
-	    rename("PinsBase/$database.geojson", "PinBase/backup/$database"."_$version.geojson");
+	    rename("PinsBase/$database.geojson", "PinsBase/backup/$database"."_$version.geojson");
 	}
 
 	if(!isset($_GET["database"])) return_json_err("no databese given");

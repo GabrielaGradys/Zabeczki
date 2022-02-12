@@ -52,7 +52,7 @@
     <div class="flex justify-between">
       <button
         class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
-        onclick="location.reload()"
+        onclick="setTimeout(()=>{location.reload(true)}, 1000);"
       >
         Anuluj
       </button>
