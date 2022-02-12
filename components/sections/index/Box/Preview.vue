@@ -12,7 +12,7 @@
       "
       class="text-white text-center text-6 font-bold text-shadow --font-secondary"
     >
-      <div>Twój Pin nie zawiera:</div>
+      <div>Twój Element nie zawiera:</div>
       <div v-if="map_vue && !map_vue.tempMarker.position">Pozycji</div>
       <div v-if="map_vue && !map_vue.tempMarker.title">Tytułu</div>
       <div v-if="map_vue && !map_vue.tempMarker.description">Opisu</div>

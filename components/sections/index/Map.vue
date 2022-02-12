@@ -90,7 +90,12 @@ export default {
     //Create a function to lad existing padlocks
     async readLibrary(database) {
       database = database ? database : this.$route.query["database"]; //jesli podano parametr, wez parametr, jesli nie to jesli jest parametr w url, wez go, a jak nie ma to ustaw na
-      let data = await fetch(`/PinsBase/${database}.geojson`);
+      let data = await fetch(
+        `/PinsBase/${database}.geojson?version=${Math.floor(
+          Math.random() * 10000
+        )}`,
+        { cache: "no-cache", headers: { "Cache-Control": "no-cache" } }
+      ); //zawsze najnowszy plik
       data = await data.json();
       return data;
     },
@@ -139,9 +144,11 @@ export default {
       }
       this.readLibrary(database).then((markers) => {
         markers.features.push(newMarker);
-        postData(`/save_to_json.php?database=${database}`, markers).then(() =>
-          location.reload()
-        );
+        postData(`/save_to_json.php?database=${database}`, markers).then(() => {
+          setTimeout(() => {
+            location.reload(true);
+          }, 1000);
+        });
         console.log(markers);
       });
     },

@@ -1,36 +1,55 @@
 <template>
   <div id="ocdBox" class="justify-center items-center gap-4 w-full h-full">
-    <div class="flex gap-4 justify-between items-center">
-      <p
-        class="text-white text-center text-6 font-bold text-shadow --font-secondary"
-      >
-        Wybierz Bazę Pinów
-      </p>
-      <select
-        id="selectBase"
-        @change="setDatabase"
-        class="bg-blue rounded-xl font-bold text-center w-full"
-      >
-        <option
-          v-for="i in pinDatabases"
-          :key="i"
-          :value="i"
-          class="p-4 bg-blue rounded-xl"
-        >
-          {{ i }}
-        </option>
-      </select>
-    </div>
-    <div class="flex justify-between gap-4">
+    <div
+      id="startBase"
+      v-if="visible === 'nothing'"
+      class="flex justify-between gap-4"
+    >
       <button
         class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
         @click="$parent.Flip('Base')"
       >
-        Dodaj nową bazę danych
+        Zmień bazę
       </button>
       <button
         class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
-        @click="$parent.Flip('Edit')"
+        @click="numberOFPin > 0 ? turnVisible('edit') : turnVisible('Add')"
+      >
+        Edytuj
+      </button>
+    </div>
+    <div id="editHow" v-if="visible === 'edit'" class="">
+      <div>
+        <button
+          class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
+          @click="$parent.Flip('Dele')"
+        >
+          Usuń Element
+        </button>
+        <button
+          class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
+          @click="turnVisible('Add')"
+        >
+          Dodaj Element
+        </button>
+      </div>
+    </div>
+    <div id="start" v-if="visible === 'Add'">
+      <button
+        class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
+        @click="
+          turnVisible('trasa');
+          $parent.Flip('Edit');
+        "
+      >
+        Dodaj Trasę
+      </button>
+      <button
+        class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
+        @click="
+          turnVisible('pin');
+          $parent.Flip('Edit');
+        "
       >
         Dodaj Pin
       </button>
@@ -41,28 +60,19 @@
 <script>
 export default {
   name: "OCDHome",
-  data: () => ({ pinDatabases: null }),
+  data: () => ({ visible: "nothing", numberOFPin: 0 }),
   methods: {
-    setDatabase(event) {
-      console.log(event);
-      window.location.href = `/?database=${event.target.value}`;
+    turnVisible(what) {
+      this.visible = what;
+      console.log(this.visible);
+      document.querySelector("#Editor").__vue__.visible = what;
     },
   },
   mounted() {
     this.map_vue = document.querySelector("#Map_Show").__vue__;
     if (!this.$route.query["database"]) {
-      window.location.href = "/?database=map";
-      return;
+      window.location.href = "/?database=klodki";
     }
-    fetch("/databases_list.php")
-      .then((x) => x.json())
-      .then((x) => (this.pinDatabases = x))
-      .then(
-        this.$nextTick(() => {
-          this.$el.querySelector("#selectBase").value =
-            this.$route.query["database"];
-        })
-      );
   },
 };
 </script>
