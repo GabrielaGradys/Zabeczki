@@ -22,7 +22,6 @@ export default {
       description: "",
       position: null,
     },
-    editMode: false,
   }),
   methods: {
     // Generate map
@@ -140,9 +139,14 @@ export default {
       }
       this.readLibrary(database).then((markers) => {
         markers.features.push(newMarker);
-        postData(`/save_to_json.php?database=${database}`, markers);
+        postData(`/save_to_json.php?database=${database}`, markers).then(() =>
+          location.reload()
+        );
         console.log(markers);
       });
+    },
+    checkMode(mode) {
+      return document.querySelector("#MainBox").__vue__.mode == mode;
     },
   },
   // Loading Map, Geocoder and geolocator and existing Markers
@@ -151,7 +155,7 @@ export default {
     this.initControls();
     // In editMode: If click -> create TempMarker
     this.map.on("click", (e) => {
-      if (this.editMode) {
+      if (this.checkMode("Edit")) {
         let position = e.lngLat.wrap();
         this.tempMarker.position = [position.lng, position.lat];
         this.updateTempMarker();
