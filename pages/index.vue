@@ -1,5 +1,5 @@
 <template>
-  <main class="grid grid-cols-1 min-h-screen">
+  <main>
     <Map />
     <Box />
   </main>

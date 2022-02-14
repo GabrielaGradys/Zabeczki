@@ -1,5 +1,5 @@
 <template>
-  <div id="Map_Show" class="flex w-full tracking-wide">
+  <div id="Map_Show" class="grid min-h-screen w-full tracking-wide">
     <div id="map" class="w-full h-full"></div>
   </div>
 </template>

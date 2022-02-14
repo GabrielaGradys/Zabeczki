@@ -39,6 +39,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   // plugins: ['~/plugins/global.js', '~/plugins/100vhFix.js'],
+  plugins: ["~/plugins/lottie-vue-player.client.js"],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
