@@ -5,6 +5,9 @@
       v-if="!visible"
       class="grid gap-4 justify-between items-center p-4"
     >
+      <div class="flex items-center justify-center">
+        <img src="/img/Zabeczki.gif" class="w-30 h-15" data-not-lazy />
+      </div>
       <p
         class="text-white text-center text-6 font-bold text-shadow --font-secondary"
       >

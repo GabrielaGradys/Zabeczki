@@ -1,5 +1,6 @@
 <template>
   <div id="ocdBox" class="justify-center items-center gap-4 w-full h-full">
+    <img src="/img/blue-frog.svg" class="w-15 h-15" />
     <div
       id="startBase"
       v-if="visible === 'nothing'"
@@ -28,7 +29,10 @@
         </button>
         <button
           class="p-4 bg-blue rounded-xl text-white font-bold text-shadow shadow hover:bg-green transition-colors duration-300"
-          @click="turnVisible('Add')"
+          @click="
+            turnVisible('pin');
+            $parent.Flip('Edit');
+          "
         >
           Dodaj Element
         </button>
@@ -54,6 +58,7 @@
         Dodaj Pin
       </button>
     </div>
+    <img src="/img/green-frog.svg" class="w-15 h-15" />
   </div>
 </template>
 

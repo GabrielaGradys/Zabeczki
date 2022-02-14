@@ -7,7 +7,13 @@
 
 <script>
 export default {
-  name: "index",
+  head() {
+    return {
+      title: "Żabeczkowa Mapa",
+      link: [{ rel: "icon", type: "image/png", href: "/img/Zabeczki.png" }],
+      name: "index",
+    };
+  },
 };
 </script>
 
